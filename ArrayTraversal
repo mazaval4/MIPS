@@ -1,0 +1,71 @@
+.data
+	array: .word 6, 4
+
+.text
+
+	la $t0 array
+	li $t1 -1
+	li $t2 2
+	li $s0 0
+	li $s1 0
+	lw $t3 0($t0)
+	
+	
+	
+	
+check: 		#checks to see if the number is equal to zero
+	bnez $t3 GTZ
+	j sum	
+	
+	
+GTZ:		#if the number is greater than zero than go to positive if not then go to negative
+	lw $t3 ($t0)
+	bgtz $t3 positive	
+	j negative
+
+positive: 	#checks to see if the number is an even positive number
+
+	div $t3 $t2
+	mfhi $t4
+	beqz $t4 addpos
+	j nextel
+	
+addpos:		#adds positive even number to the sum of positive even numbers then jumps to nextel
+	add $s0 $s0 $t3
+	j nextel
+
+negative:	
+	mult $t3 $t1	#multiplys number by -1 to get it positive
+	mflo $t3	#moves the positive number back to the original register
+	div $t3 $t2	#divides the number by 2
+	mfhi $t4	#moves the remainder to a temporary register
+	bgtz $t4 addneg	#checks if the remainder is greater than 0 if it is, it goes to addneg 	
+	j nextel		#if not then it goes to nextel
+	
+addneg:
+	mult $t3 $t1	#multiplys the number by -1
+	mflo $t3	#moves the number back to the original destination
+	add $s1 $s1 $t3	#adds the number to the negative sum
+	j nextel	#jumps to nextel
+
+
+
+
+nextel:			#this program moves to the next element in the array
+	sll $t5 $t6 2
+	add $t5 $t0 $t5
+	lw $t3 0($t5)
+	addi $t6 $t6 1
+	j check
+	
+
+sum:		#this will be called when the number is equal to zero thus ending the program
+
+	add $t7 $s0 $s1
+	j done
+	
+done:				#runs whenever something needs to be printed
+	li $v0, 1	
+	add $a0,$zero,$t7
+	syscall
+	

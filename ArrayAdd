@@ -1,0 +1,126 @@
+################################################################################################
+# Date: October 6 2014
+# Author: Miguel Angel Zavala
+# Purpose: Write an assembly language program that puts 5 numbers in an array and adds them together.  
+#	Store the total value in the first element of the array.  Replace each element thereafter with 2 times 
+#	the value before it.   Keep your numbers small.   Print the array. 
+#
+#################################################################################################
+
+
+.data
+array1:	.space 20
+
+.text
+
+	
+	
+	la $t0 array1	
+	
+	li $t1 1
+	sw $t1, ($t0)
+	
+	li $t1 2
+	sw $t1, 4($t0)
+	
+	li $t1 3
+	sw $t1, 8($t0)
+	
+	li $t1 4
+	sw $t1, 12($t0)
+	
+	li $t1 5
+	sw $t1, 16($t0)
+	
+	li $t2 0
+	
+	li $t5 5
+	li $s7 5
+	li $t8 0
+	
+	
+	
+	
+	j loop
+	
+	
+	
+#adds the numbers in the array together and puts the in the temp register $t3
+loop:
+	lw $t6 array1($t2)
+	add $t3 $t3 $t6
+	addi $t5 $t5 -1
+	addi $t2 $t2 4
+	bgtz $t5 loop
+	j elements
+	
+
+#sets location 0 on the array to the sume of the array and replaces each element thereafter with 2 times
+#the value before it	
+elements:
+	li $s0 0
+	li $s1 2
+	
+	lw $s2 array1($s0)
+	mult $s2 $s1 
+	mflo $s2
+	addi $s0 $s0 4
+	
+	lw $s3 array1($s0)
+	mult $s3 $s1 
+	mflo $s3
+	addi $s0 $s0 4
+	
+	lw $s4 array1($s0)
+	mult $s4 $s1 
+	mflo $s4
+	addi $s0 $s0 4
+	
+	lw $s5 array1($s0)
+	mult $s5 $s1 
+	mflo $s5
+	addi $s0 $s0 4
+	
+	
+	sw $t3, ($t0)
+	sw $s2,4($t0)
+	sw $s3,8($t0)
+	sw $s4,12($t0)
+	sw $s5,16($t0)
+	
+	
+
+	j done
+	
+#prints the values in the array	
+done:	
+
+	lw $a0 array1($t8)
+	li $v0, 1
+	syscall
+	addi $t8 $t8 4
+	
+	lw $a0 array1($t8)
+	li $v0, 1
+	syscall
+	addi $t8 $t8 4
+	
+	lw $a0 array1($t8)
+	li $v0, 1
+	syscall
+	addi $t8 $t8 4
+	
+	lw $a0 array1($t8)
+	li $v0, 1
+	syscall
+	addi $t8 $t8 4
+	
+	lw $a0 array1($t8)
+	li $v0, 1
+	syscall
+	addi $t8 $t8 4
+	
+	
+
+	
+	

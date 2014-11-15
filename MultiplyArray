@@ -1,0 +1,45 @@
+################################################################################################
+# Date: October 22 2014
+# Author: Miguel Angel Zavala
+# Purpose: This program is taken from problem 5.8 in the handout which states:
+#	int k,y
+#	intZ[50]
+#	y = 56
+#	k = 20
+#	Z[k] = ((y-k)*4) 
+#	The assignment is to do that in mips
+#################################################################################################
+
+.data
+	#allocate space for 50 elements
+	z: .space 200
+
+.text
+
+	#load the address of position one in array z into a temporay register
+	la $t0 z	
+	
+	#load the values of the integers into temporary registers
+	li $t1 20
+	li $t2 56
+	li $t3 4
+	
+	#subtract y - k
+	sub $t2 $t2 $t1
+	
+	#multiply the result by 4
+	mult $t2 $t3
+	
+	#move from the low register into a temporary register
+	mflo $t3
+	
+	#store the result of the arithmetic at element 20
+	sw $t3,80($t0)
+	
+	#print out the result
+	li $v0,1
+	add $a0,$zero,$t3
+	syscall
+	
+	
+	
